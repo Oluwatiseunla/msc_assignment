@@ -19,12 +19,27 @@ async function loadData() {
 }
 
 async function run() {
+  console.log("App started");
+
   const data = await loadData();
+  console.log("Data loaded:", data.length);
+
+  if (data.length === 0) {
+    console.error("No data loaded");
+    return;
+  }
 
   const values = data.map(d => ({
     x: d.horsepower,
     y: d.mpg,
   }));
+
+  tfvis.render.scatterplot(
+    { name: 'Scatter Plot: Horsepower vs MPG' },
+    { values },
+    { xLabel: 'Horsepower', yLabel: 'MPG', height: 300 }
+  );
+}
 
   tfvis.render.scatterplot(
     { name: 'Scatter Plot: Horsepower vs MPG' },
@@ -44,10 +59,15 @@ async function run() {
   );
 
   tfvis.render.linechart(
-    { name: 'Line Chart: MPG Trend' },
-    { values },
-    { xLabel: 'Horsepower', yLabel: 'MPG', height: 400 }
-  );
+  { name: 'Line Chart: Horsepower vs MPG' },
+  { values },
+  {
+    xLabel: 'Horsepower',
+    yLabel: 'MPG',
+    height: 400,
+    width: 800,
+  }
+);
 
   const histData = data.map(d => d.horsepower);
 
