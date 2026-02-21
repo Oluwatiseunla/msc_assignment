@@ -1,36 +1,61 @@
-// TASK 1: Variable arguments multiplication
-function multiplyAll(...args) {
-    if (args.length === 0) return 0;
-    return args.reduce((acc, val) => acc * val, 1);
+/**
+ * Fetch car data and clean it
+ */
+async function loadData() {
+  const carsDataResponse = await fetch(
+    "https://storage.googleapis.com/tfjs-tutorials/carsData.json"
+  );
+
+  const carsData = await carsDataResponse.json();
+
+  const cleaned = carsData
+    .map(car => ({
+      mpg: car.Miles_per_Gallon,
+      horsepower: car.Horsepower,
+    }))
+    .filter(car => car.mpg != null && car.horsepower != null);
+
+  return cleaned;
 }
 
-// Log a test to your console (Press F12 in browser to see)
-console.log("Multiplication Result (2,3,4):", multiplyAll(2, 3, 4));
+async function run() {
+  const data = await loadData();
 
-// TASK 2: API Call and Visualization
-async function runVisualization() {
-    const apiURL = "https://jsonplaceholder.typicode.com/users";
-    
-    try {
-        const response = await fetch(apiURL);
-        const data = await response.json();
+  const values = data.map(d => ({
+    x: d.horsepower,
+    y: d.mpg,
+  }));
 
-        // Transform data: Get Name and the length of the Name
-        const chartData = data.map(user => ({
-            index: user.username,
-            value: user.name.length
-        }));
+  tfvis.render.scatterplot(
+    { name: 'Scatter Plot: Horsepower vs MPG' },
+    { values },
+    { xLabel: 'Horsepower', yLabel: 'MPG', height: 300 }
+  );
 
-        const container = { name: 'User Name Lengths', tab: 'Charts' };
-        
-        // Render Bar Chart
-        tfvis.render.barchart(container, chartData, {
-            xLabel: 'Username',
-            yLabel: 'Name Length',
-            height: 300
-        });
+  const barChartValues = data.map((d, i) => ({
+    index: i,
+    value: d.mpg,
+  }));
 
-    } catch (err) {
-        console.error("API Error:", err);
-    }
+  tfvis.render.barchart(
+    { name: 'Bar Chart of MPG Values' },
+    barChartValues,
+    { height: 300, width: 800 }
+  );
+
+  tfvis.render.linechart(
+    { name: 'Line Chart: MPG Trend' },
+    { values },
+    { xLabel: 'Horsepower', yLabel: 'MPG', height: 400 }
+  );
+
+  const histData = data.map(d => d.horsepower);
+
+  tfvis.render.histogram(
+    { name: "Histogram of Horsepower" },
+    histData,
+    { maxBins: 20, height: 400 }
+  );
 }
+
+document.addEventListener('DOMContentLoaded', run);

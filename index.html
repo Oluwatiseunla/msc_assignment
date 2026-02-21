@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>JS Assignment</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+  <meta charset="UTF-8">
+  <title>TensorFlow.js Visualization</title>
+
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+  <!-- TensorFlow.js Vis -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Data Visualization with TFJS</h1>
-    <button onclick="runVisualization()">Plot Bar Chart</button>
-    <script src="script.js"></script>
+  <h1>Car Data Visualization</h1>
+  <p>Horsepower vs MPG</p>
+
+  <script src="script.js"></script>
 </body>
 </html>
